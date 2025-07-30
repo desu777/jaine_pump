@@ -1,0 +1,119 @@
+// Prisma schema for PumpJaine Backend
+// Uses better-sqlite3 adapter for optimal performance
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Main users table - The Simps
+model Simp {
+  // Primary identification
+  wallet_address String @id @map("wallet_address")
+  simp_nick     String @unique @map("simp_nick")
+
+  // Deployment statistics by rarity
+  common_deploys              Int @default(0) @map("common_deploys")
+  cope_harder_deploys         Int @default(0) @map("cope_harder_deploys")
+  maximum_cope_deploys        Int @default(0) @map("maximum_cope_deploys")
+  ultimate_rejection_deploys  Int @default(0) @map("ultimate_rejection_deploys")
+  ascended_simp_deploys       Int @default(0) @map("ascended_simp_deploys")
+  legendary_ultra_deploys     Int @default(0) @map("legendary_ultra_deploys")
+  total_deploys              Int @default(0) @map("total_deploys")
+
+  // Metadata
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  sessions    Session[]
+  deployments Deployment[]
+
+  @@map("simps")
+  @@index([total_deploys])
+  @@index([created_at])
+}
+
+// Authentication sessions
+model Session {
+  id             String   @id @default(cuid()) @map("id")
+  wallet_address String   @map("wallet_address")
+  nonce          String?  @map("nonce")
+  expires_at     DateTime @map("expires_at")
+  created_at     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  simp Simp @relation(fields: [wallet_address], references: [wallet_address], onDelete: Cascade)
+
+  @@map("sessions")
+  @@index([wallet_address])
+  @@index([expires_at])
+  @@index([nonce])
+}
+
+// Contract templates configuration
+model ContractTemplate {
+  id          Int    @id @default(autoincrement()) @map("id")
+  name        String @unique @map("name")
+  rarity      String @map("rarity")
+  file_path   String @map("file_path")
+  description String? @map("description")
+  
+  // Statistics
+  total_deployments Int @default(0) @map("total_deployments")
+  
+  // Metadata
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  deployments Deployment[]
+
+  @@map("contract_templates")
+  @@index([rarity])
+  @@index([total_deployments])
+}
+
+// Deployment tracking
+model Deployment {
+  id               String   @id @default(cuid()) @map("id")
+  wallet_address   String   @map("wallet_address")
+  contract_address String   @map("contract_address")
+  template_id      Int      @map("template_id")
+  tx_hash          String   @unique @map("tx_hash")
+  block_number     Int?     @map("block_number")
+  gas_used         String?  @map("gas_used")
+  
+  // Metadata
+  created_at DateTime @default(now()) @map("created_at")
+
+  // Relations
+  simp     Simp             @relation(fields: [wallet_address], references: [wallet_address])
+  template ContractTemplate @relation(fields: [template_id], references: [id])
+
+  @@map("deployments")
+  @@index([wallet_address])
+  @@index([template_id])
+  @@index([created_at])
+}
+
+// Compilation cache for performance optimization
+model CompilationCache {
+  id           String   @id @default(cuid()) @map("id")
+  template_id  Int      @map("template_id")
+  source_hash  String   @unique @map("source_hash")
+  abi          String   @map("abi") // JSON string
+  bytecode     String   @map("bytecode")
+  metadata     String?  @map("metadata") // Compilation metadata
+  compiled_at  DateTime @default(now()) @map("compiled_at")
+
+  @@map("compilation_cache")
+  @@index([template_id])
+  @@index([source_hash])
+  @@index([compiled_at])
+}
