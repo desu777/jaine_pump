@@ -70,7 +70,7 @@ export class AuthResponseDto {
   success: boolean;
 
   @ApiResponseProperty({
-    description: 'JWT access token',
+    description: 'Session access token',
     required: false
   })  
   access_token?: string;

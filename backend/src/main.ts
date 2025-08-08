@@ -89,8 +89,8 @@ async function bootstrap() {
         .addBearerAuth({
           type: 'http',
           scheme: 'bearer',
-          bearerFormat: 'JWT',
-          description: 'Enter JWT token from /auth/verify endpoint',
+          bearerFormat: 'Session',
+          description: 'Enter session token from /auth/verify endpoint',
         })
         .addServer(`http://localhost:${appConfig.port}`, 'Development Server')
         .addServer(securityConfig.uri, 'Production Server')

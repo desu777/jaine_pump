@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UseGuards, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiExtraModels } from '@nestjs/swagger';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { SessionAuthGuard } from './guards/session-auth.guard';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthService } from './auth.service';
@@ -16,7 +16,7 @@ import {
 @ApiTags('auth')
 @ApiExtraModels(GenerateNonceDto, VerifySignatureDto, AuthResponseDto, NonceResponseDto, UserProfileDto, LogoutResponseDto)
 @Controller('auth')
-@UseGuards(JwtAuthGuard)
+@UseGuards(SessionAuthGuard)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

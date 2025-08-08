@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { Public } from '../auth/decorators/public.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { ContractTemplateService } from './contract-template.service';
@@ -15,7 +15,7 @@ import {
 
 @ApiTags('contract-templates')
 @Controller('contract-templates')
-@UseGuards(JwtAuthGuard)
+@UseGuards(SessionAuthGuard)
 export class ContractTemplateController {
   constructor(
     private readonly contractTemplateService: ContractTemplateService,

@@ -1,20 +1,10 @@
 import { Injectable, UnauthorizedException, BadRequestException, Logger } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../database/prisma.service';
 import { UserService } from '../user/user.service';
 import { SiweService } from './siwe.service';
 import { ConfigService } from '../config/config.service';
 import { GenerateNonceDto, VerifySignatureDto, AuthResponseDto, NonceResponseDto } from './dto/auth.dto';
 
-export interface JwtPayload {
-  sub: string;
-  wallet_address: string;
-  simp_nick: string;
-  iat?: number;
-  exp?: number;
-  iss?: string;
-  aud?: string;
-}
 
 export interface SessionData {
   id: string;
@@ -31,7 +21,6 @@ export class AuthService {
 
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService,
     private userService: UserService,
     private siweService: SiweService,
     private configService: ConfigService,
@@ -128,20 +117,23 @@ export class AuthService {
         }
       }
 
-      // Generate JWT token
-      const tokenPayload: JwtPayload = {
-        sub: user.wallet_address,
-        wallet_address: user.wallet_address,
-        simp_nick: user.simp_nick,
-      };
+      // Create session token
+      const sessionToken = this.siweService.generateNonce(); // Use nonce as session token
+      const sessionExpiration = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-      const access_token = this.jwtService.sign(tokenPayload);
-      const tokenExpiration = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+      // Store session in database
+      await this.prisma.session.create({
+        data: {
+          wallet_address: user.wallet_address,
+          nonce: sessionToken,
+          expires_at: sessionExpiration,
+        },
+      });
 
       return {
         success: true,
-        access_token,
-        expires_at: tokenExpiration.toISOString(),
+        access_token: sessionToken,
+        expires_at: sessionExpiration.toISOString(),
         user: {
           wallet_address: user.wallet_address,
           simp_nick: user.simp_nick,
@@ -165,11 +157,24 @@ export class AuthService {
   }
 
   /**
-   * Validate JWT payload for strategy
+   * Validate session token
    */
-  async validateJwtPayload(payload: JwtPayload) {
+  async validateSessionToken(token: string) {
     try {
-      const user = await this.userService.findByWalletAddress(payload.wallet_address);
+      const session = await this.prisma.session.findFirst({
+        where: {
+          nonce: token,
+          expires_at: {
+            gt: new Date(),
+          },
+        },
+      });
+
+      if (!session) {
+        throw new UnauthorizedException('Invalid or expired session');
+      }
+
+      const user = await this.userService.findByWalletAddress(session.wallet_address);
       
       if (!user) {
         throw new UnauthorizedException('User not found');
@@ -178,8 +183,8 @@ export class AuthService {
       return user;
       
     } catch (error) {
-      this.logger.error('JWT validation failed:', error);
-      throw new UnauthorizedException('Invalid token');
+      this.logger.error('Session validation failed:', error);
+      throw new UnauthorizedException('Invalid session token');
     }
   }
 

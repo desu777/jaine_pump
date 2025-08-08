@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, Param, Query, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { Public } from '../auth/decorators/public.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { DeployService } from './deploy.service';
@@ -8,7 +8,7 @@ import { RecordDeploymentDto, DeploymentResponseDto, DeploymentStatsDto } from '
 
 @ApiTags('deployments')
 @Controller('deployments')
-@UseGuards(JwtAuthGuard)
+@UseGuards(SessionAuthGuard)
 export class DeployController {
   constructor(private readonly deployService: DeployService) {}
 

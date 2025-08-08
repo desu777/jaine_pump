@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, UseGuards, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiExtraModels } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { Public } from '../auth/decorators/public.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { CompilerService } from './compiler.service';
@@ -13,7 +13,7 @@ import {
 @ApiTags('compiler')
 @ApiExtraModels(CompileContractDto, CompilationResultDto, CompilerStatusDto)
 @Controller('compiler')
-@UseGuards(JwtAuthGuard)
+@UseGuards(SessionAuthGuard)
 export class CompilerController {
   constructor(private readonly compilerService: CompilerService) {}
 

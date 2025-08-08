@@ -5,10 +5,6 @@ export interface DatabaseConfig {
   url: string;
 }
 
-export interface JwtConfig {
-  secret: string;
-  expiresIn: string;
-}
 
 export interface NetworkConfig {
   rpc: string;
@@ -62,12 +58,6 @@ export class ConfigService {
     };
   }
 
-  get jwt(): JwtConfig {
-    return {
-      secret: this.nestConfigService.get<string>('JWT_SECRET'),
-      expiresIn: this.nestConfigService.get<string>('JWT_EXPIRES_IN', '24h'),
-    };
-  }
 
   get network(): NetworkConfig {
     return {
