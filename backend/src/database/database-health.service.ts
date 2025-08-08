@@ -14,8 +14,7 @@ export interface DatabaseHealth {
   connection: {
     adapter: string;
     database_url: string;
-    wal_enabled: boolean;
-    foreign_keys: boolean;
+    provider: string;
   };
 }
 

@@ -25,6 +25,6 @@ import { envLoader } from './env-loader';
     }),
   ],
   providers: [ConfigService],
-  exports: [ConfigService],
+  exports: [ConfigService, NestConfigModule],
 })
 export class ConfigModule {}

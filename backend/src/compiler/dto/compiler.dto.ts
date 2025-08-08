@@ -61,23 +61,23 @@ export class CompileContractDto {
 }
 
 export class CompilationResultDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Compilation success status'
   })
   success: boolean;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Contract ABI',
     type: 'array'
   })
   abi: any[];
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Contract bytecode'
   })
   bytecode: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Contract template information'
   })
   template: {
@@ -86,7 +86,7 @@ export class CompilationResultDto {
     description: string;
   };
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Compilation settings used'
   })
   compilation_settings: {
@@ -96,7 +96,7 @@ export class CompilationResultDto {
     runs: number;
   };
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Compilation metadata'
   })
   metadata: {
@@ -106,7 +106,7 @@ export class CompilationResultDto {
     gas_estimates?: any;
   };
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Error information if compilation failed',
     required: false
   })
@@ -118,22 +118,22 @@ export class CompilationResultDto {
 }
 
 export class CompilerStatusDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Compiler service status'
   })
   status: 'healthy' | 'degraded' | 'unavailable';
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Available compiler versions'
   })
   available_versions: string[];
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Supported EVM versions'
   })
   supported_evm_versions: string[];
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Cache statistics'
   })
   cache_stats: {
@@ -142,7 +142,7 @@ export class CompilerStatusDto {
     last_cleanup: string;
   };
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Performance metrics'
   })
   performance: {

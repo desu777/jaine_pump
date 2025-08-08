@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { RarityService, RaritySelection } from './rarity.service';
 import { ConfigService } from '../config/config.service';
@@ -11,14 +11,14 @@ export interface ContractTemplate {
   name: string;
   rarity: string;
   file_path: string;
-  description?: string;
+  description?: string | null;
   total_deployments: number;
   created_at: Date;
   updated_at: Date;
 }
 
 @Injectable()
-export class ContractTemplateService implements OnModuleInit {
+export class ContractTemplateService {
   private readonly logger = new Logger(ContractTemplateService.name);
   private readonly contractsBasePath = join(process.cwd(), 'contracts');
   
@@ -28,11 +28,8 @@ export class ContractTemplateService implements OnModuleInit {
     private configService: ConfigService,
   ) {}
 
-  async onModuleInit() {
-    if (this.configService.app.isDevelopment) {
-      await this.seedTemplatesIfNeeded();
-    }
-  }
+  // Removed onModuleInit due to ConfigService injection issues during initialization
+  // Seeding can be done manually or via a separate endpoint if needed
 
   /**
    * Get random contract template based on rarity weights

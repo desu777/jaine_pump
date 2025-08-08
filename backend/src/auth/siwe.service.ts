@@ -72,7 +72,7 @@ export class SiweService {
       this.validateSiweMessage(siweMessage);
       
       // Verify the signature
-      const result = await siweMessage.verify({ signature });
+      const result = await siweMessage.verify({ signature }) as any;
       
       if (this.configService.app.testEnv) {
         this.logger.debug('SIWE verification successful', {
@@ -118,7 +118,7 @@ export class SiweService {
         version: siweMessage.version,
         chainId: siweMessage.chainId,
         nonce: siweMessage.nonce,
-        issuedAt: siweMessage.issuedAt,
+        issuedAt: siweMessage.issuedAt || new Date().toISOString(),
         expirationTime: siweMessage.expirationTime,
         notBefore: siweMessage.notBefore,
         requestId: siweMessage.requestId,
@@ -147,7 +147,7 @@ export class SiweService {
    * Validate SIWE message structure and content
    */
   private validateSiweMessage(siweMessage: SiweMessage): void {
-    const { domain, chainId } = this.configService.security;
+    const { domain } = this.configService.security;
     const expectedChainId = parseInt(this.configService.network.chainId, 10);
 
     // Validate domain

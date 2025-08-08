@@ -30,98 +30,98 @@ export class GetRandomTemplateDto {
 }
 
 export class ContractTemplateDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Template unique identifier'
   })
   id: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Contract template name'
   })
   name: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Template rarity level',
     enum: RarityType
   })
   rarity: RarityType;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Path to contract source file'
   })
   file_path: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Template description'
   })
   description: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Total number of deployments'
   })
   total_deployments: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Creation timestamp'
   })
   created_at: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Last update timestamp'
   })
   updated_at: string;
 }
 
 export class RarityConfigDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Rarity name'
   })
   name: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Selection weight (percentage)'
   })
   weight: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Display color (hex)'
   })
   color: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Rarity description'
   })
   description: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Number of available templates'
   })
   template_count: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Total deployments for this rarity'
   })
   total_deployments: number;
 }
 
 export class TemplateStatsDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Total number of templates'
   })
   total_templates: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Templates by rarity',
     type: 'object'
   })
   by_rarity: Record<string, number>;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Total deployments across all templates'
   })
   total_deployments: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Most popular template'
   })
   most_popular: {
@@ -130,7 +130,7 @@ export class TemplateStatsDto {
     deployments: number;
   };
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Least deployed template'
   })
   least_deployed: {

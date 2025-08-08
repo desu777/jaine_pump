@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaBetterSQLite3 } from '@prisma/adapter-better-sqlite3';
-import Database from 'better-sqlite3';
+import * as Database from 'better-sqlite3';
 
 // Initialize Prisma with better-sqlite3 adapter
 const database = new Database(process.env.DATABASE_URL?.replace('file:', '') || './data/production.db');
-const adapter = new PrismaBetterSQLite3(database);
+const adapter = new PrismaBetterSQLite3(database as any);
 const prisma = new PrismaClient({ adapter });
 
 interface ContractTemplateData {

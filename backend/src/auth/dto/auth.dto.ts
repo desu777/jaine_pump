@@ -38,25 +38,25 @@ export class VerifySignatureDto {
 }
 
 export class NonceResponseDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Generated nonce for signing',
     example: 'abc123def456'
   })
   nonce: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Timestamp when nonce was generated (ISO string)',
     example: '2025-07-30T12:00:00.000Z'
   })
   timestamp: string;
   
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Expiration timestamp for the nonce (ISO string)',
     example: '2025-07-30T12:10:00.000Z'
   })
   expires_at: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'SIWE message template to sign',
     example: 'pumpjaine.com wants you to sign in with your Ethereum account...'
   })
@@ -64,24 +64,24 @@ export class NonceResponseDto {
 }
 
 export class AuthResponseDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Authentication success status'
   })
   success: boolean;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Session access token',
     required: false
   })  
   access_token?: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Token expiration time',
     required: false
   })
   expires_at?: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'User information',
     required: false
   })
@@ -92,7 +92,7 @@ export class AuthResponseDto {
     created_at: string;
   };
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Error message if authentication failed',
     required: false
   })
@@ -100,27 +100,27 @@ export class AuthResponseDto {
 }
 
 export class UserProfileDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'User wallet address'
   })
   wallet_address: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Unique simp nickname'
   })
   simp_nick: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Total contract deployments'
   })
   total_deploys: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Account creation timestamp'
   })
   created_at: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Deployment statistics by rarity'
   })
   deployment_stats: {
@@ -134,12 +134,12 @@ export class UserProfileDto {
 }
 
 export class LogoutResponseDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Logout success status'
   })
   success: boolean;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Success message'
   })
   message: string;

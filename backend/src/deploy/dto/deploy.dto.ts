@@ -45,17 +45,17 @@ export class RecordDeploymentDto {
 }
 
 export class DeploymentResponseDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Operation success status'
   })
   success: boolean;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Deployment ID'
   })
   deployment_id: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Updated user statistics'
   })
   updated_stats: {
@@ -68,7 +68,7 @@ export class DeploymentResponseDto {
     level_up: boolean;
   };
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Deployment details'
   })
   deployment: {
@@ -81,22 +81,22 @@ export class DeploymentResponseDto {
 }
 
 export class DeploymentStatsDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Total deployments across platform'
   })
   total_deployments: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Deployments in last 24 hours'
   })
   deployments_24h: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Deployments by rarity'
   })
   by_rarity: Record<string, number>;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Most popular templates'
   })
   popular_templates: Array<{
@@ -105,7 +105,7 @@ export class DeploymentStatsDto {
     deployments: number;
   }>;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Recent deployments'
   })
   recent_deployments: Array<{

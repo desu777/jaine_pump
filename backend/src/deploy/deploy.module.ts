@@ -3,9 +3,10 @@ import { DeployController } from './deploy.controller';
 import { DeployService } from './deploy.service';
 import { UserModule } from '../user/user.module';
 import { ContractTemplateModule } from '../contract-template/contract-template.module';
+import { ConfigModule } from '../config/config.module';
 
 @Module({
-  imports: [UserModule, ContractTemplateModule],
+  imports: [ConfigModule, UserModule, ContractTemplateModule],
   controllers: [DeployController],
   providers: [DeployService],
   exports: [DeployService],

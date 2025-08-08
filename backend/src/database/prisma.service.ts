@@ -1,42 +1,33 @@
-import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
+import { Injectable, OnModuleInit, OnModuleDestroy, Logger, Inject } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSQLite3 } from '@prisma/adapter-better-sqlite3';
-import Database from 'better-sqlite3';
 import { ConfigService } from '../config/config.service';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(PrismaService.name);
-  private database: Database.Database;
 
-  constructor(private configService: ConfigService) {
-    const dbUrl = configService.database.url;
-    const dbPath = dbUrl.replace('file:', '');
-    
-    // Initialize better-sqlite3 database
-    const database = new Database(dbPath, {
-      verbose: configService.app.testEnv ? console.log : undefined,
-    });
-    
-    // Enable WAL mode for better concurrent access
-    database.pragma('journal_mode = WAL');
-    database.pragma('synchronous = NORMAL');
-    database.pragma('cache_size = 1000000');
-    database.pragma('foreign_keys = true');
-    database.pragma('temp_store = memory');
-    
-    // Initialize Prisma with better-sqlite3 adapter
-    const adapter = new PrismaBetterSQLite3(database);
-    
+  constructor(@Inject(ConfigService) private readonly configService: ConfigService) {
+    // Use our custom ConfigService with proper method calls
+    const databaseUrl = configService.database.url;
+    const nodeEnv = configService.app.env;
+    const testEnv = configService.app.testEnv;
+
     super({
-      adapter,
+      datasources: {
+        db: {
+          url: databaseUrl,
+        },
+      },
       log: configService.app.isDevelopment 
         ? ['query', 'info', 'warn', 'error'] 
         : ['error'],
       errorFormat: 'pretty',
     });
 
-    this.database = database;
+    // Log initialization for debugging
+    if (testEnv) {
+      this.logger.debug(`Initializing Prisma with database: ${databaseUrl}`);
+    }
   }
 
   async onModuleInit() {
@@ -56,7 +47,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   async onModuleDestroy() {
     try {
       await this.$disconnect();
-      this.database?.close();
       this.logger.log('🔌 Database disconnected');
     } catch (error) {
       this.logger.error('Error during database disconnect:', error);
@@ -156,10 +146,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
    */
   getConnectionInfo() {
     return {
-      adapter: 'better-sqlite3',
+      adapter: 'prisma-sqlite',
       database_url: this.configService.database.url,
-      wal_enabled: true,
-      foreign_keys: true,
+      provider: 'sqlite',
     };
   }
 }

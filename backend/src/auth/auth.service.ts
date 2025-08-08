@@ -9,7 +9,7 @@ import { GenerateNonceDto, VerifySignatureDto, AuthResponseDto, NonceResponseDto
 export interface SessionData {
   id: string;
   wallet_address: string;
-  nonce: string;
+  nonce: string | null;
   expires_at: Date;
   created_at: Date;
 }

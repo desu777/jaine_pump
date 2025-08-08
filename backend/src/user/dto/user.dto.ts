@@ -28,17 +28,17 @@ export class GetLeaderboardDto {
 }
 
 export class UserStatsDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'User wallet address'
   })
   wallet_address: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Unique simp nickname'
   })
   simp_nick: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Deployment counts by rarity'
   })
   deployment_counts: {
@@ -51,7 +51,7 @@ export class UserStatsDto {
     total_deploys: number;
   };
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Account timestamps'
   })
   timestamps: {
@@ -59,12 +59,12 @@ export class UserStatsDto {
     updated_at: string;
   };
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'User rank based on total deployments'
   })
   rank: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Simp level based on total deployments'
   })
   simp_level: {
@@ -76,37 +76,37 @@ export class UserStatsDto {
 }
 
 export class LeaderboardEntryDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Leaderboard rank (1-based)'
   })
   rank: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'User wallet address'
   })
   wallet_address: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Simp nickname'
   })
   simp_nick: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Total deployments'
   })
   total_deploys: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Account age in days'
   })
   account_age_days: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Most deployed rarity'
   })
   favorite_rarity: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Simp level'
   })
   simp_level: {
@@ -116,32 +116,32 @@ export class LeaderboardEntryDto {
 }
 
 export class UserDeploymentHistoryDto {
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Deployment ID'
   })
   id: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Contract address'
   })
   contract_address: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Transaction hash'
   })
   tx_hash: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Block number'
   })
   block_number: number;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Gas used'
   })
   gas_used: string;
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Template information'
   })
   template: {
@@ -150,7 +150,7 @@ export class UserDeploymentHistoryDto {
     description: string;
   };
 
-  @ApiResponseProperty({
+  @ApiProperty({
     description: 'Deployment timestamp'
   })
   deployed_at: string;

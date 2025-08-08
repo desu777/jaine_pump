@@ -3,7 +3,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from './config/config.service';
 import helmet from 'helmet';
-import * as compression from 'compression';
+import compression from 'compression';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -43,7 +43,7 @@ async function bootstrap() {
       transform: true,
       validateCustomDecorators: true,
       transformOptions: {
-        enableImplicitConversion: true,
+        enableImplicitConversion: false,
       },
     }));
 
@@ -96,7 +96,9 @@ async function bootstrap() {
         .addServer(securityConfig.uri, 'Production Server')
         .build();
       
-      const document = SwaggerModule.createDocument(app, config);
+      // TODO: Fix circular dependency issue before re-enabling
+      // const document = SwaggerModule.createDocument(app, config);
+      /*
       SwaggerModule.setup('docs', app, document, {
         customSiteTitle: 'PumpJaine API Documentation',
         customCss: `
@@ -111,12 +113,13 @@ async function bootstrap() {
           tryItOutEnabled: true,
         },
       });
+      */
 
-      logger.log(`📚 API Documentation: http://localhost:${appConfig.port}/docs`);
+      // logger.log(`📚 API Documentation: http://localhost:${appConfig.port}/docs`);
     }
 
     // Health check endpoint
-    app.use('/health', (req, res) => {
+    app.use('/health', (req: any, res: any) => {
       res.status(200).json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
@@ -134,6 +137,7 @@ async function bootstrap() {
 
     if (appConfig.testEnv) {
       logger.debug('🔧 Debug logging enabled');
+      logger.log('✅ BACKEND INITIALIZED SUCCESSFULLY');
     }
 
   } catch (error) {

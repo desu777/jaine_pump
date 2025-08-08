@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { ConfigService as NestConfigService } from '@nestjs/config';
 
 export interface DatabaseConfig {
@@ -36,7 +36,7 @@ export interface AppConfig {
 
 @Injectable()
 export class ConfigService {
-  constructor(private nestConfigService: NestConfigService) {}
+  constructor(@Inject(NestConfigService) private nestConfigService: NestConfigService) {}
 
   get app(): AppConfig {
     const env = this.nestConfigService.get<string>('NODE_ENV', 'production');
@@ -54,14 +54,14 @@ export class ConfigService {
 
   get database(): DatabaseConfig {
     return {
-      url: this.nestConfigService.get<string>('DATABASE_URL'),
+      url: this.nestConfigService.get<string>('DATABASE_URL', 'file:./data/production.db'),
     };
   }
 
 
   get network(): NetworkConfig {
     return {
-      rpc: this.nestConfigService.get<string>('ZERO_G_TESTNET_RPC'),
+      rpc: this.nestConfigService.get<string>('ZERO_G_TESTNET_RPC', 'https://evmrpc-testnet.0g.ai'),
       chainId: this.nestConfigService.get<string>('ZERO_G_CHAIN_ID', '16601'),
       explorer: this.nestConfigService.get<string>('ZERO_G_EXPLORER'),
       faucet: this.nestConfigService.get<string>('ZERO_G_FAUCET'),
@@ -69,12 +69,12 @@ export class ConfigService {
   }
 
   get security(): SecurityConfig {
-    const corsOrigins = this.nestConfigService.get<string>('CORS_ORIGINS', '');
+    const corsOrigins = this.nestConfigService.get<string>('CORS_ORIGINS', 'http://localhost:3000');
     
     return {
       corsOrigins: corsOrigins.split(',').map(origin => origin.trim()),
-      domain: this.nestConfigService.get<string>('DOMAIN'),
-      uri: this.nestConfigService.get<string>('URI'),
+      domain: this.nestConfigService.get<string>('DOMAIN', 'localhost'),
+      uri: this.nestConfigService.get<string>('URI', 'http://localhost:3001'),
     };
   }
 
